@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import np.com.sagunraj.youtubeparsing.entities.Item;
@@ -24,7 +26,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     @NonNull
     @Override
     public CustomAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { // for layout inflating and MyViewHolder will be used for findViewById()
-        View convertView = LayoutInflater.from(context).inflate(R.layout.singleitem, null);
+        View convertView = LayoutInflater.from(context).inflate(R.layout.singleitem, parent, false);
         return new MyViewHolder(convertView);
     }
 
@@ -32,6 +34,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public void onBindViewHolder(@NonNull CustomAdapter.MyViewHolder holder, int position) { // for setting data since the parameter 'position' is present here
         holder.title.setText(data.get(position).getSnippet().getTitle());
         holder.date.setText(data.get(position).getSnippet().getPublishedAt());
+        Glide.with(context).load(data.get(position).getSnippet().getThumbnails().getDefault().getUrl()).into(holder.imv);
     }
 
     @Override
