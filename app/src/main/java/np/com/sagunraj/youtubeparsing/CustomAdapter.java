@@ -1,6 +1,7 @@
 package np.com.sagunraj.youtubeparsing;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,10 +32,18 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomAdapter.MyViewHolder holder, int position) { // for setting data since the parameter 'position' is present here
+    public void onBindViewHolder(@NonNull CustomAdapter.MyViewHolder holder, final int position) { // for setting data since the parameter 'position' is present here
         holder.title.setText(data.get(position).getSnippet().getTitle());
         holder.date.setText(data.get(position).getSnippet().getPublishedAt());
         Glide.with(context).load(data.get(position).getSnippet().getThumbnails().getDefault().getUrl()).into(holder.imv);
+        holder.convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, PlayerActivity.class);
+                intent.putExtra("id", data.get(position).getSnippet().getResourceId().getVideoId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -45,11 +54,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imv;
         TextView title, date;
+        View convertView;
         public MyViewHolder(View itemView) {
             super(itemView);
             imv = itemView.findViewById(R.id.imv);
             title = itemView.findViewById(R.id.title);
             date = itemView.findViewById(R.id.date);
+            convertView = itemView;
         }
     }
 }
